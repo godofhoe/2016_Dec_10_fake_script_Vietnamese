@@ -28,7 +28,7 @@ class ZipfGenerator:
 
     
     def __init__(self, n, alpha): 
-        """Ininitialize a Zipf CDF.
+        """Initialize a Zipf CDF.
          Paramerters
          n: int 
             n >= 0
