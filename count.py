@@ -178,3 +178,51 @@ def main(file_name, encode = "UTF-8"):
     data_frame = produce_wordRank_charRank_frame(pd_word,pd_char,longest_l)
     print("Successfully build data frames!")
     return data_frame, pd_char, another_word
+
+
+def check_const_ratio(data, feature= "wordRank", criteria = "wordFreq",max_range = 200):
+    """Calculate the ratios of date in the feature column
+    
+    Parameters:
+    ---
+    data: numpy.DataFrame
+        a data frame contains information about word stats.
+    
+    feature: string
+        feature to be oberved
+    
+    max_range: int 
+        the maximum lenth of wordRank to be covered
+                
+        
+    
+    Returns
+    ---
+    new: numpy.array
+        a numpy array containing rotios of the data satisfying Ming's criteria in the feature column.
+    
+    """
+    np_array = np.array([])
+    
+    for i in range(1,max_range):
+        dd = data[data[criteria] == i]
+        if dd.empty: break
+        else:
+            tmp = np.array(dd.tail(1)[feature])
+            np_array = np.append(np_array,tmp)
+        
+    numer_array = np.append(np_array,[1])
+    denom_array = np.append([1],np_array)
+    new = numer_array / denom_array
+    print(feature, " ratio: ",new[1:-1])
+    print("std= ",new[1:-1].std())
+    return new
+
+def draw_density_plot(data, slice_number, feature = "0th_char_rank" ):
+    """input a pandas data frame, draw a density diagram of feature column, slice
+    the diagram into slice_number equal pieces. 
+    """
+    xx = data[feature]
+    yy = np.arange(len(xx))
+    plt.hist2d(yy,xx, slice_number, cmap=plt.cm.jet)
+    plt.colorbar()
